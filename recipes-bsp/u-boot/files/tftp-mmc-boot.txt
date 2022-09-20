@@ -1,44 +1,10 @@
-# This is the default TFTP and MMC u-boot boot script
-# The order is as follows:
-#  1. TFTP load a uEnv.txt
-#  2. TFTP boot a fitImage
-#  3. MMC load a uEnv.txt
-#  4. MMC load a fitImage
-#  5. TFTP load a uImage
-#  6. MMC load a fitImage
+setenv devtype mmc
+setenv devnum 0
 
-# Setup the DHCP for a TFTP boot
-setenv serverip @SERVERIP@
-dhcp
+ext4load ${devtype} ${devnum}:2 ${scriptaddr} /boot/loader/uEnv.txt
 
-# See if we have a TFTP uEnv.txt file
-if tftpboot ${scriptaddr} uEnv.txt; then
-    env import -t ${scriptaddr} ${filesize}
-    run bootcmd
-fi;
+env import -t ${scriptaddr} ${filesize}
 
-# Try to boot a fitImage from the TFTP server
-if tftpboot ${ramdisk_addr_r} fitImage; then
-  bootm ${ramdisk_addr_r}
-fi;
+ext4load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${kernel_image}
 
-# See if we have a MMC uEnv.txt file
-if fatload ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} /uEnv.txt; then
-    env import -t ${scriptaddr} ${filesize}
-    run bootcmd
-fi;
-
-# Try to boot a fitImage from the MMC
-if load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} fitImage; then
-  bootm ${ramdisk_addr_r}
-fi;
-
-# Fallback to a TFTP uImage
-if tftpboot ${kernel_addr_r} uImage; then
-  bootm ${kernel_addr_r} - ${fdt_addr_r}
-fi;
-
-# Finally fallback to a MMC uImage
-if load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} uImage; then
-  bootm ${kernel_addr_r} - ${fdt_addr_r}
-fi;
+bootm ${ramdisk_addr_r}:kernel-1 ${ramdisk_addr_r}:ramdisk-1 ${fdtcontroladdr}

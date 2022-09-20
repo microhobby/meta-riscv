@@ -1,19 +1,19 @@
 require recipes-bsp/u-boot/u-boot-common.inc
 require recipes-bsp/u-boot/u-boot.inc
 
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=2ca5f2c35c8cc335f0a19756634782f1"
+
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 SRC_URI = " \
-    git://github.com/tekkamanninja/u-boot.git;protocol=https;branch=allwinner_d1 \
-    file://0001-sun20i-set-CONFIG_SYS_BOOTM_LEN.patch \
-    file://0001-riscv-fix-build-with-binutils-2.38.patch \
+    git://github.com/microhobby/u-boot.git;protocol=https;branch=d1-wip \
     file://tftp-mmc-boot.txt \
     file://uEnv-nezha.txt \
     file://toc.cfg \
 "
 
-SRCREV = "6db9960b2443ef84b88a573cb5817f8e0ef3712e"
+SRCREV = "11d29433c87fcde7d28180a2794524ce6a32da48"
 
 DEPENDS:append = " u-boot-tools-native python3-setuptools-native"
 
