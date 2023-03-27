@@ -13,7 +13,7 @@ SRC_URI = " \
     file://toc.cfg \
 "
 
-SRCREV = "11d29433c87fcde7d28180a2794524ce6a32da48"
+SRCREV = "7f3d17b80541608e3cafa5f0c5885786aeb4b177"
 
 DEPENDS:append = " u-boot-tools-native python3-setuptools-native"
 
